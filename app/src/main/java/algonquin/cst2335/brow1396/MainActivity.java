@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import algonquin.cst2335.brow1396.data.MainViewModel;
@@ -29,20 +28,20 @@ public class MainActivity extends AppCompatActivity {
         variableBinding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String editString = variableBinding.myedittext.getText().toString();
+                model.editString.setValue(variableBinding.myedittext.getText().toString());
                 variableBinding.myedittext.setText("Your edit text has changed ");
-                variableBinding.textview.setText("My text view has changed: " + editString);
+                variableBinding.textview.setText("My text view has changed: " + model.editString.getValue());
             }
         }
         );
 
-        variableBinding.checkBox.setOnCheckedChangeListener((button, isOn) -> {
+        variableBinding.checkBox.setOnCheckedChangeListener((button, isChecked) -> {
             model.isOn.postValue(true);
         });
-        variableBinding.switch1.setOnCheckedChangeListener((button, isOn) -> {
+        variableBinding.switch1.setOnCheckedChangeListener((button, isChecked) -> {
             model.isOn.postValue(true);
         });
-        variableBinding.radioButton.setOnCheckedChangeListener((button, isOn) -> {
+        variableBinding.radioButton.setOnCheckedChangeListener((button, isChecked) -> {
             model.isOn.postValue(true);
         });
 
@@ -52,9 +51,14 @@ public class MainActivity extends AppCompatActivity {
            variableBinding.checkBox.setChecked(selected);
            variableBinding.radioButton.setChecked(selected);
            variableBinding.switch1.setChecked(selected);
-           //Toast.makeText(MainActivity.this, "The value is now: " + model.isOn, Toast.LENGTH_SHORT).show();
+           Toast.makeText(MainActivity.this, "The value is now: ", Toast.LENGTH_SHORT).show();
         });
 
+        variableBinding.myimagebutton.setOnClickListener((button) -> {
+            int width = variableBinding.myimagebutton.getWidth();
+            int height = variableBinding.myimagebutton.getHeight();
+            Toast.makeText(MainActivity.this, "The width = " + width + " and height = " + height, Toast.LENGTH_LONG).show();
+        });
 
     }
 }
