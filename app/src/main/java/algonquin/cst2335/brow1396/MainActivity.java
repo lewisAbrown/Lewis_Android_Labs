@@ -1,31 +1,60 @@
 package algonquin.cst2335.brow1396;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
+import algonquin.cst2335.brow1396.data.MainViewModel;
 import algonquin.cst2335.brow1396.databinding.ActivityMainBinding;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding variableBinding;
+    MainViewModel model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        variableBinding = ActivityMainBinding.inflate(getLayoutInflater()); // this will load my pre-made variable from ViewBinding
+        variableBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        variableBinding.firstString.setText("Java changed this");
+        setContentView( variableBinding.getRoot());
+        variableBinding.myedittext.setText("I'm an edit text");
+        variableBinding.button.setText("I'm a Button");
 
-        variableBinding.secondString.setText("Im an edit text");
+        variableBinding.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String editString = variableBinding.myedittext.getText().toString();
+                variableBinding.myedittext.setText("Your edit text has changed ");
+                variableBinding.textview.setText("My text view has changed: " + editString);
+            }
+        }
+        );
 
-        setContentView(variableBinding.getRoot()); //this shows the objects on screen
+        variableBinding.checkBox.setOnCheckedChangeListener((button, isOn) -> {
+            model.isOn.postValue(true);
+        });
+        variableBinding.switch1.setOnCheckedChangeListener((button, isOn) -> {
+            model.isOn.postValue(true);
+        });
+        variableBinding.radioButton.setOnCheckedChangeListener((button, isOn) -> {
+            model.isOn.postValue(true);
+        });
 
-        // event listener for when the button is clicked
-        variableBinding.button.setOnClickListener( (view) -> {
-            String Return = variableBinding.secondString.getText().toString(); //set variable return to hold the new input in text box
-            variableBinding.secondString.setText("Your edit text has: " + Return); //set second text box to variable holder and return
+        model = new ViewModelProvider(this).get(MainViewModel.class);
+
+        model.isOn.observe(this, selected -> {
+           variableBinding.checkBox.setChecked(selected);
+           variableBinding.radioButton.setChecked(selected);
+           variableBinding.switch1.setChecked(selected);
+           //Toast.makeText(MainActivity.this, "The value is now: " + model.isOn, Toast.LENGTH_SHORT).show();
         });
 
 
-}}
+    }
+}
