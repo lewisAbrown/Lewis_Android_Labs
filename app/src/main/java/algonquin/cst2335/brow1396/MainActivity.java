@@ -36,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
         );
 
         variableBinding.checkBox.setOnCheckedChangeListener((button, isChecked) -> {
-            model.isOn.postValue(true);
+            model.isOn.postValue(isChecked);
         });
         variableBinding.switch1.setOnCheckedChangeListener((button, isChecked) -> {
-            model.isOn.postValue(true);
+            model.isOn.postValue(isChecked);
         });
         variableBinding.radioButton.setOnCheckedChangeListener((button, isChecked) -> {
-            model.isOn.postValue(true);
+            model.isOn.postValue(isChecked);
         });
 
         model = new ViewModelProvider(this).get(MainViewModel.class);
@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
            variableBinding.checkBox.setChecked(selected);
            variableBinding.radioButton.setChecked(selected);
            variableBinding.switch1.setChecked(selected);
-           Toast.makeText(MainActivity.this, "The value is now: ", Toast.LENGTH_SHORT).show();
+           String value = model.isOn.getValue().toString();
+           Toast.makeText(MainActivity.this, "The value is now: " + value, Toast.LENGTH_SHORT).show();
         });
 
         variableBinding.myimagebutton.setOnClickListener((button) -> {
