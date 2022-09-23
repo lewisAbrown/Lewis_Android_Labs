@@ -25,10 +25,13 @@ public class MainActivity extends AppCompatActivity {
         variableBinding.myedittext.setText("I'm an edit text");
         variableBinding.button.setText("I'm a Button");
 
-        variableBinding.button.setOnClickListener(view -> {
-            model.editString.setValue(variableBinding.myedittext.getText().toString());
+        model.editString.observe(this, new_string->{
             variableBinding.myedittext.setText("Your edit text has changed ");
-            variableBinding.textview.setText("My text view has changed: " + model.editString.getValue());
+            variableBinding.textview.setText("My text view has changed: " + new_string;
+        });
+
+            variableBinding.button.setOnClickListener(view -> {
+            model.editString.setValue(variableBinding.myedittext.getText().toString());
         }
         );
 
