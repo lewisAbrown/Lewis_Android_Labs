@@ -19,15 +19,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        model = new ViewModelProvider(this).get(MainViewModel.class);
+
         variableBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView( variableBinding.getRoot());
         variableBinding.myedittext.setText("I'm an edit text");
         variableBinding.button.setText("I'm a Button");
 
-        model.editString.observe(this, new_string->{
+        model.editString.observe(this, new_string -> {
             variableBinding.myedittext.setText("Your edit text has changed ");
-            variableBinding.textview.setText("My text view has changed: " + new_string;
+            variableBinding.textview.setText("My text view has changed: " + new_string);
         });
 
             variableBinding.button.setOnClickListener(view -> {
@@ -44,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
         variableBinding.radioButton.setOnCheckedChangeListener((button, isChecked) -> {
             model.isOn.postValue(isChecked);
         });
-
-        model = new ViewModelProvider(this).get(MainViewModel.class);
 
         model.isOn.observe(this, selected -> {
            variableBinding.checkBox.setChecked(selected);
