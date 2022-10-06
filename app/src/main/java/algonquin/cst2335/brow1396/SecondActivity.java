@@ -3,6 +3,7 @@ package algonquin.cst2335.brow1396;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
@@ -32,24 +33,32 @@ public class SecondActivity extends AppCompatActivity {
 
         binding.textView.setText("Welcome back " + emailAddress);
 
-    }
+        binding.button.setOnClickListener(clk -> {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            call.setData(Uri.parse("tel:" + call.putExtra("editTextPhone", binding.editTextPhone.getText())));
+            startActivity(call);
+        });
 
-    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        binding.buttonimage.setOnClickListener(clk->{
+        ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
 
-                        Intent data = result.getData();
-                        Bitmap thumbnail = data.getParcelableExtra("data");
-                        binding.profileImage.setImageBitmap( thumbnail);
+                            Intent data = result.getData();
+                            Bitmap thumbnail = data.getParcelableExtra("data");
+                            binding.profileImage.setImageBitmap(thumbnail);
+                            startActivity(data);
+                        }
                     }
-                }
-            });
+                });
 
+        cameraResult.launch(cameraIntent);
 
-
+        });
+}
 }
