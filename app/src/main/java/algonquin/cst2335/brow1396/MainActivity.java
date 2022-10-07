@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         //pulls data from MyData.xml and sets to editText field
         SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        String previous = prefs.getString("LoginName", "defaultValue");
+        String previous = prefs.getString("LoginName", "   ");
         binding.emailEditText.setText(previous);
 
         binding.loginButton.setOnClickListener( clk-> {

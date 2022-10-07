@@ -74,7 +74,7 @@ public class SecondActivity extends AppCompatActivity {
         binding.button.setOnClickListener(clk -> {
             Intent call = new Intent(Intent.ACTION_DIAL);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("LoginName", binding.editTextPhone.getText().toString());
+            editor.putString("PhoneNumber", binding.editTextPhone.getText().toString());
             editor.apply();
             String phoneNumber = binding.editTextPhone.getText().toString();
             call.setData(Uri.parse("tel:" + phoneNumber));
