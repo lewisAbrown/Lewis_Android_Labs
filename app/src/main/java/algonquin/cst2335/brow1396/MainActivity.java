@@ -1,6 +1,8 @@
 package algonquin.cst2335.brow1396;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,14 +23,21 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.loginButton.setOnClickListener( clk-> {
 
+        //pulls data from MyData.xml and sets to editText field
+        SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String previous = prefs.getString("LoginName", "defaultValue");
+        binding.emailEditText.setText(previous);
+
+        binding.loginButton.setOnClickListener( clk-> {
             Intent nextPage = new Intent(MainActivity.this, SecondActivity.class); //tell where you want to go
             nextPage.putExtra("EmailAddress", binding.emailEditText.getText().toString());
-            startActivity(nextPage); //will go to another activity
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("LoginName", binding.emailEditText.getText().toString());
+            editor.apply();
+            startActivity(nextPage);//will go to another activity
         } );
 
-      //  SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
     }
 

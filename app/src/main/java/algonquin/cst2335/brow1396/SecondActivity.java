@@ -3,6 +3,7 @@ package algonquin.cst2335.brow1396;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -24,6 +25,7 @@ public class SecondActivity extends AppCompatActivity {
 
     ActivitySecondBinding binding;
     Bitmap mBitmap;
+
 
     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
@@ -60,6 +62,10 @@ public class SecondActivity extends AppCompatActivity {
         binding = ActivitySecondBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String prevPhone = prefs.getString("PhoneNumber", "   ");
+        binding.editTextPhone.setText(prevPhone);
+
         Intent fromPrevious = getIntent();
         String emailAddress = fromPrevious.getStringExtra("EmailAddress");
 
@@ -67,18 +73,21 @@ public class SecondActivity extends AppCompatActivity {
 
         binding.button.setOnClickListener(clk -> {
             Intent call = new Intent(Intent.ACTION_DIAL);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("LoginName", binding.editTextPhone.getText().toString());
+            editor.apply();
             String phoneNumber = binding.editTextPhone.getText().toString();
             call.setData(Uri.parse("tel:" + phoneNumber));
             startActivity(call);
         });
 
-        binding.buttonimage.setOnClickListener(clk->
-        cameraResult.launch(cameraIntent));
+        binding.buttonimage.setOnClickListener(clk->  cameraResult.launch(cameraIntent));
 
         File file = new File( getFilesDir(), "Picture.png");
         if(file.exists())
         {
-            Bitmap theImage = BitmapFactory.decodeFile(getFilesDir().getAbsolutePath() + "/Picture.png");
+            String path = getFilesDir().getAbsolutePath() + "/Picture.png";
+            Bitmap theImage = BitmapFactory.decodeFile(path);
             binding.profileImage.setImageBitmap(theImage);
         }
     }
