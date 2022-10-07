@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
             nextPage.putExtra("EmailAddress", binding.emailEditText.getText().toString());
             startActivity(nextPage); //will go to another activity
         } );
+
+      //  SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+
     }
 
     //activity is visible but not responding to touch

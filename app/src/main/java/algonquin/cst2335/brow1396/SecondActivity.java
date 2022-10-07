@@ -1,8 +1,10 @@
 package algonquin.cst2335.brow1396;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,6 +14,9 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import algonquin.cst2335.brow1396.databinding.ActivitySecondBinding;
 
@@ -24,6 +29,7 @@ public class SecondActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
+
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -31,7 +37,17 @@ public class SecondActivity extends AppCompatActivity {
                         Intent data = result.getData();
                         Bitmap thumbnail = data.getParcelableExtra("data");
                         binding.profileImage.setImageBitmap(thumbnail);
-                        startActivity(data);
+                        FileOutputStream fOut = null;
+
+                        try {
+                            fOut = openFileOutput("Picture.png", Context.MODE_PRIVATE);
+                            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                            fOut.flush();
+                            fOut.close();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
@@ -58,5 +74,12 @@ public class SecondActivity extends AppCompatActivity {
 
         binding.buttonimage.setOnClickListener(clk->
         cameraResult.launch(cameraIntent));
-}
+
+        File file = new File( getFilesDir(), "Picture.png");
+        if(file.exists())
+        {
+            Bitmap theImage = BitmapFactory.decodeFile(getFilesDir().getAbsolutePath() + "/Picture.png");
+            binding.profileImage.setImageBitmap(theImage);
+        }
+    }
 }
