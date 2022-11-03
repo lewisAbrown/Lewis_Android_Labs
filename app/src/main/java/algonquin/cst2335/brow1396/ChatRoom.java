@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import algonquin.cst2335.brow1396.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.brow1396.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
+
+    private ArrayList<String> messages;
 
     /**
      * inner Class MyRowHolder
@@ -34,21 +38,33 @@ public class ChatRoom extends AppCompatActivity {
      * variables and constructor
      */
     ActivityChatRoomBinding binding;
-    ArrayList<String> messages = new ArrayList<>();
+    ChatRoomViewModel chatModel ;
     private RecyclerView.Adapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /**
+         * Variables
+         */
+        chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
+        messages = chatModel.messages.getValue();
+        if(messages == null)
+        {
+            chatModel.messages.postValue( messages = new ArrayList<String>());
+        }
+
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.recycleView.setLayoutManager(new LinearLayoutManager(this));    // saying its a vertical list
 
         binding.sendButton.setOnClickListener(click -> {
            messages.add(binding.textInput.getText().toString());
            myAdapter.notifyItemInserted(messages.size()-1);
            binding.textInput.setText("");
         });
+
 
         binding.recycleView.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>(){
             @NonNull
@@ -75,6 +91,7 @@ public class ChatRoom extends AppCompatActivity {
             public int getItemViewType(int position){
                 return 0;
             }
+
 
         } );
     }
