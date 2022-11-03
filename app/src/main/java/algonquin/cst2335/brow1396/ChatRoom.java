@@ -18,7 +18,7 @@ import algonquin.cst2335.brow1396.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
 
-    private ArrayList<String> messages;
+    ArrayList<ChatMessage> messages = new ArrayList<>();
 
     /**
      * inner Class MyRowHolder
@@ -52,7 +52,7 @@ public class ChatRoom extends AppCompatActivity {
         messages = chatModel.messages.getValue();
         if(messages == null)
         {
-            chatModel.messages.postValue( messages = new ArrayList<String>());
+            chatModel.messages.postValue( messages = new ArrayList<ChatMessage>());
         }
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());

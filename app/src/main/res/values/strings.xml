@@ -2,4 +2,6 @@
     <string name="app_name">Lewis\' Android Labs</string>
     <string name="message" translatable="false">Message goes here</string>
     <string name="time" translatable="false">Time goes here</string>
+    <string name="Button" translatable="false">Send</string>
+    <string name="Button2" translatable="false">Receive</string>
 </resources>
