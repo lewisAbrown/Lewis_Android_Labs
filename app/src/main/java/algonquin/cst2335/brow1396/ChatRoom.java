@@ -60,7 +60,9 @@ public class ChatRoom extends AppCompatActivity {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));    // saying its a vertical list
 
         binding.sendButton.setOnClickListener(click -> {
-           messages.add(binding.textInput.getText().toString());
+
+            ChatMessage newMessage = new ChatMessage(binding.textInput.getText().toString(),1);
+           messages.add(newMessage);
            myAdapter.notifyItemInserted(messages.size()-1);
            binding.textInput.setText("");
         });
