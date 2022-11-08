@@ -11,14 +11,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import algonquin.cst2335.brow1396.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.brow1396.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
 
-    ArrayList<ChatMessage> messages = new ArrayList<>();
+    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<ChatMessage> objects = new ArrayList<>();
 
     /**
      * inner Class MyRowHolder
@@ -52,19 +55,29 @@ public class ChatRoom extends AppCompatActivity {
         messages = chatModel.messages.getValue();
         if(messages == null)
         {
-            chatModel.messages.postValue( messages = new ArrayList<ChatMessage>());
+            chatModel.messages.postValue( messages = new ArrayList<String>());
         }
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));    // saying its a vertical list
 
+        // On Click function
         binding.sendButton.setOnClickListener(click -> {
 
-            ChatMessage newMessage = new ChatMessage(binding.textInput.getText().toString(),1);
-           messages.add(newMessage);
-           myAdapter.notifyItemInserted(messages.size()-1);
-           binding.textInput.setText("");
+           SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
+           String currentDateandTime = sdf.format(new Date());
+
+           String messageText = binding.textInput.getText().toString();
+           objects.add(messageText, currentDateandTime, true);
+
+
+           //refresh the list
+           myAdapter.notifyItemInserted(messages.size()-1); //wants to know which position has changed
+           binding.textInput.setText(""); //remove what was there
+
+
+
         });
 
 
@@ -72,14 +85,20 @@ public class ChatRoom extends AppCompatActivity {
             @NonNull
             @Override
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-                SentMessageBinding binding = SentMessageBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
+                // code taken from prof
+                if(viewType == 0){
+                    SentMessageBinding binding = SentMessageBinding.inflate(getLayoutInflater());
+                    return new MyRowHolder(binding.getRoot());
+                }
+                else{
+                    ReceiveMessageBinding binding = ReceiveMessageBinding.inflate(getLayoutInflater());
+                    return new MyRowHolder(binding.getRoot());
+                }
+
             }
 
             @Override
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position){
-                holder.messageText.setText("");
-                holder.timeText.setText("");
                 String obj = messages.get(position);
                 holder.messageText.setText(obj);
             }

@@ -12,4 +12,16 @@ public void ChatRoom(String m, String t, boolean sent)
         timeSent = t;
         isSentButton = sent;
     }
+    public String getMessage(){
+    return message;
+    }
+
+    public String getTimeSent(){
+        return timeSent;
+    }
+
+    public boolean getIsSentButton(){
+        return isSentButton;
+    }
+
 }
