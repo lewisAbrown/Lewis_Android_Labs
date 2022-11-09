@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import algonquin.cst2335.brow1396.databinding.ActivityChatRoomBinding;
+import algonquin.cst2335.brow1396.databinding.ReceiveMessageBinding;
 import algonquin.cst2335.brow1396.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
 
     ArrayList<ChatMessage> messages = new ArrayList<>();
-//    ArrayList<ChatMessage> objects = new ArrayList<>();
 
     /**
      * inner Class MyRowHolder
@@ -70,13 +70,21 @@ public class ChatRoom extends AppCompatActivity {
            String messageText = binding.textInput.getText().toString();
            messages.add (new ChatMessage(messageText, currentDateandTime, true));
 
-
            //refresh the list
            myAdapter.notifyItemInserted(messages.size()-1); //wants to know which position has changed
            binding.textInput.setText(""); //remove what was there
+        });
 
+        binding.receiveButton.setOnClickListener(click -> {
 
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
+            String currentDateandTime = sdf.format(new Date());
+            String messageText = binding.textInput.getText().toString();
+            messages.add (new ChatMessage(messageText, currentDateandTime, false));
 
+            //refresh the list
+            myAdapter.notifyItemInserted(messages.size()-1); //wants to know which position has changed
+            binding.textInput.setText(""); //remove what was there
         });
 
 
@@ -98,8 +106,11 @@ public class ChatRoom extends AppCompatActivity {
 
             @Override
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position){
-                String obj = messages.get(position);
-                holder.messageText.setText(obj);
+                String text = messages.get(position).getMessage();
+                holder.messageText.setText(text);
+
+                String time = messages.get(position).getTimeSent();
+                holder.timeText.setText(time);
             }
 
             @Override
@@ -109,9 +120,11 @@ public class ChatRoom extends AppCompatActivity {
 
             @Override
             public int getItemViewType(int position){
-                return 0;
+                if (messages.get(position).getIsSentButton() == true){
+                    return 0;
+                }
+                else return 1;
             }
-
 
         } );
     }
