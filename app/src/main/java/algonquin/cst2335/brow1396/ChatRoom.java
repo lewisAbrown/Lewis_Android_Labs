@@ -20,8 +20,8 @@ import algonquin.cst2335.brow1396.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
 
-    ArrayList<String> messages = new ArrayList<>();
-    ArrayList<ChatMessage> objects = new ArrayList<>();
+    ArrayList<ChatMessage> messages = new ArrayList<>();
+//    ArrayList<ChatMessage> objects = new ArrayList<>();
 
     /**
      * inner Class MyRowHolder
@@ -55,7 +55,7 @@ public class ChatRoom extends AppCompatActivity {
         messages = chatModel.messages.getValue();
         if(messages == null)
         {
-            chatModel.messages.postValue( messages = new ArrayList<String>());
+            chatModel.messages.postValue( messages = new ArrayList<ChatMessage>());
         }
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
@@ -67,9 +67,8 @@ public class ChatRoom extends AppCompatActivity {
 
            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
            String currentDateandTime = sdf.format(new Date());
-
            String messageText = binding.textInput.getText().toString();
-           objects.add(messageText, currentDateandTime, true);
+           messages.add (new ChatMessage(messageText, currentDateandTime, true));
 
 
            //refresh the list

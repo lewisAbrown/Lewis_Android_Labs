@@ -6,7 +6,7 @@ public class ChatMessage {
     String timeSent;
     boolean isSentButton;
 
-public void ChatRoom(String m, String t, boolean sent)
+public ChatMessage(String m, String t, boolean sent)
     {
         message = m;
         timeSent = t;
